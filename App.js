@@ -3,7 +3,11 @@ import { ScrollView, SafeAreaView } from "react-native";
 import styled from "styled-components";
 import Card from "./components/Card";
 import Logo from "./components/Logo";
+import Course from "./components/Course";
 import { NotificationIcon } from "./components/Icons";
+import LogosModel from "./Models/LogosModel";
+import CardsModel from "./Models/CardsModel";
+import CoursesModel from "./Models/CoursesModel";
 export default class App extends React.Component {
   render() {
     return (
@@ -13,7 +17,7 @@ export default class App extends React.Component {
             <TitleBar>
               <Avatar source={require("./assets/avatar.jpg")} />
               <Title>Welcome back,</Title>
-              <Name>Jogn</Name>
+              <Name>John</Name>
               <NotificationIcon
                 style={{ position: "absolute", right: 20, top: 5 }}
               />
@@ -26,22 +30,9 @@ export default class App extends React.Component {
               }}
               showsHorizontalScrollIndicator={false}
             >
-              <Logo
-                image={require("./assets/logo-framerx.png")}
-                text="Framer X"
-              />
-              <Logo
-                image={require("./assets/logo-framerx.png")}
-                text="Framer X2"
-              />
-              <Logo
-                image={require("./assets/logo-framerx.png")}
-                text="Framer X3"
-              />
-              <Logo
-                image={require("./assets/logo-framerx.png")}
-                text="Framer 56"
-              />
+              {LogosModel.map((logo, index) => (
+                <Logo key={index} image={logo.image} text={logo.text} />
+              ))}
             </ScrollView>
             <Subtitle>Continue Learning</Subtitle>
             <ScrollView
@@ -49,28 +40,30 @@ export default class App extends React.Component {
               style={{ paddingBottom: 30 }}
               showsHorizontalScrollIndicator={false}
             >
-              <Card
-                title="Styled Components"
-                image={require("./assets/background2.jpg")}
-                logo={require("./assets/logo-react.png")}
-                caption="React Native"
-                subtitle="5 of 12 sections"
-              />
-              <Card
-                title="Styled Components"
-                image={require("./assets/background2.jpg")}
-                logo={require("./assets/logo-react.png")}
-                caption="React Native"
-                subtitle="5 of 12 sections"
-              />
-              <Card
-                title="Styled Components"
-                image={require("./assets/background2.jpg")}
-                logo={require("./assets/logo-react.png")}
-                caption="React Native"
-                subtitle="5 of 12 sections"
-              />
+              {CardsModel.map((card, index) => (
+                <Card
+                  key={index}
+                  title={card.title}
+                  image={card.image}
+                  logo={card.logo}
+                  caption={card.caption}
+                  subtitle={card.subtitle}
+                />
+              ))}
             </ScrollView>
+            <Subtitle>Popular Courses</Subtitle>
+            {CoursesModel.map((course, index) => (
+              <Course
+                key={index}
+                subtitle={course.subtitle}
+                title={course.title}
+                image={course.image}
+                logo={course.logo}
+                avatar={course.avatar}
+                caption={course.caption}
+                author={course.author}
+              />
+            ))}
           </ScrollView>
         </SafeAreaView>
       </Container>
@@ -115,7 +108,7 @@ const Name = styled.Text`
 const Subtitle = styled.Text`
   font-size: 15px;
   color: #b8bece;
-  font-weight: 600;
+  font-weight: 500;
   margin-left: 20px;
   margin-top: 20px;
   text-transform: uppercase;
