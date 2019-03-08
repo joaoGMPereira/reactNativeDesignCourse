@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-
+import { Dimensions } from "react-native";
+const screenWidth = Dimensions.get("window").width;
 const Card = props => (
   <Container>
     <Cover>
@@ -21,7 +22,7 @@ export default Card;
 
 const Container = styled.View`
   background: white;
-  width: 315px;
+  width: ${screenWidth * 0.9};
   height: 280px;
   border-radius: 14px;
   margin-left: 10px;
@@ -31,7 +32,6 @@ const Container = styled.View`
 `;
 
 const Cover = styled.View`
-  width: 100%;
   height: 200px;
   border-top-right-radius: 14px;
   border-top-left-radius: 14px;

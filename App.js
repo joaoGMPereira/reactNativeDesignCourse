@@ -1,115 +1,44 @@
 import React from "react";
-import { ScrollView, SafeAreaView } from "react-native";
-import styled from "styled-components";
-import Card from "./components/Card";
-import Logo from "./components/Logo";
-import Course from "./components/Course";
-import { NotificationIcon } from "./components/Icons";
-import LogosModel from "./Models/LogosModel";
-import CardsModel from "./Models/CardsModel";
-import CoursesModel from "./Models/CoursesModel";
-export default class App extends React.Component {
-  render() {
-    return (
-      <Container>
-        <SafeAreaView>
-          <ScrollView style={{ height: "100%" }}>
-            <TitleBar>
-              <Avatar source={require("./assets/avatar.jpg")} />
-              <Title>Welcome back,</Title>
-              <Name>John</Name>
-              <NotificationIcon
-                style={{ position: "absolute", right: 20, top: 5 }}
-              />
-            </TitleBar>
-            <ScrollView
-              horizontal={true}
-              style={{
-                paddingTop: 30,
-                paddingBottom: 20
-              }}
-              showsHorizontalScrollIndicator={false}
-            >
-              {LogosModel.map((logo, index) => (
-                <Logo key={index} image={logo.image} text={logo.text} />
-              ))}
-            </ScrollView>
-            <Subtitle>Continue Learning</Subtitle>
-            <ScrollView
-              horizontal={true}
-              style={{ paddingBottom: 30 }}
-              showsHorizontalScrollIndicator={false}
-            >
-              {CardsModel.map((card, index) => (
-                <Card
-                  key={index}
-                  title={card.title}
-                  image={card.image}
-                  logo={card.logo}
-                  caption={card.caption}
-                  subtitle={card.subtitle}
-                />
-              ))}
-            </ScrollView>
-            <Subtitle>Popular Courses</Subtitle>
-            {CoursesModel.map((course, index) => (
-              <Course
-                key={index}
-                subtitle={course.subtitle}
-                title={course.title}
-                image={course.image}
-                logo={course.logo}
-                avatar={course.avatar}
-                caption={course.caption}
-                author={course.author}
-              />
-            ))}
-          </ScrollView>
-        </SafeAreaView>
-      </Container>
-    );
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import AppNavigator from "./navigator/AppNavigator";
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "react-apollo";
+
+const client = new ApolloClient({
+  uri: `https://graphql.contentful.com/content/v1/spaces/ldcl3ayg0mhx`,
+  credentials: "same-origin",
+  headers: {
+    Authorization: `Bearer 93f3808c25c1f5bdb95476ca8576c6eaa12b5587efb956efb242ceead7cb3840`
   }
-}
+});
 
-const Container = styled.View`
-  flex: 1;
-  background-color: #f0f3f5;
-`;
+const initialState = {
+  action: "",
+  name: "",
+  photo: "https://cl.ly/57c1494bee41/download/avatar-default.jpg"
+};
 
-const TitleBar = styled.View`
-  width: 100%;
-  margin-top: 50px;
-  padding-left: 80px;
-`;
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "OPEN_MENU":
+      return { action: "openMenu" };
+    case "CLOSE_MENU":
+      return { action: "closeMenu" };
+    case "UPDATE_NAME":
+      return { name: action.name, photo: action.photo };
+    default:
+      return state;
+  }
+};
+const store = createStore(reducer);
 
-const Avatar = styled.Image`
-  width: 44px;
-  height: 44px;
-  background: black;
-  border-radius: 22px;
-  margin-left: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-`;
+const App = () => (
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <AppNavigator />
+    </Provider>
+  </ApolloProvider>
+);
 
-const Title = styled.Text`
-  font-size: 16px;
-  color: #b8bece;
-  font-weight: 500;
-`;
-
-const Name = styled.Text`
-  font-size: 20px;
-  color: #3c4560;
-  font-weight: bold;
-`;
-
-const Subtitle = styled.Text`
-  font-size: 15px;
-  color: #b8bece;
-  font-weight: 500;
-  margin-left: 20px;
-  margin-top: 20px;
-  text-transform: uppercase;
-`;
+export default App;

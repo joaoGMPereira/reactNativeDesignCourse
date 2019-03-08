@@ -20,11 +20,11 @@ const Course = props => (
 export default Course;
 
 const Container = styled.View`
-  width: 80%;
+  width: 90%;
   height: 335px;
   background: white;
   margin: 10px;
-  margin-left: 10%;
+  margin-left: 5%;
   border-radius: 14px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 `;

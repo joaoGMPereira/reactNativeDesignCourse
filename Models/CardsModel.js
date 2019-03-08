@@ -1,32 +1,68 @@
+import gql from "graphql-tag";
+
 const Cards = [
   {
     title: "React Native for Designers",
     image: require("../assets/background11.jpg"),
-    logo: require("../assets/logo-react.png"),
-    caption: "React Native",
-    subtitle: "1 of 12 sections"
+    subtitle: "React Native",
+    caption: "1 of 12 sections",
+    logo: require("../assets/logo-react.png")
   },
   {
     title: "Styled Components",
     image: require("../assets/background12.jpg"),
-    logo: require("../assets/logo-react.png"),
-    caption: "React Native",
-    subtitle: "2 of 12 sections"
+    subtitle: "React Native",
+    caption: "2 of 12 sections",
+    logo: require("../assets/logo-react.png")
   },
   {
     title: "Props and Icons",
     image: require("../assets/background13.jpg"),
-    logo: require("../assets/logo-react.png"),
-    caption: "React Native",
-    subtitle: "3 of 12 sections"
+    subtitle: "React Native",
+    caption: "3 of 12 sections",
+    logo: require("../assets/logo-react.png")
   },
   {
-    title: "Static Data and Components",
+    title: "Static Data and Loop",
     image: require("../assets/background14.jpg"),
-    logo: require("../assets/logo-react.png"),
-    caption: "React Native",
-    subtitle: "4 of 12 sections"
+    subtitle: "React Native",
+    caption: "4 of 12 sections",
+    logo: require("../assets/logo-react.png")
   }
 ];
 
-export default Cards;
+const CardsQuery = gql`
+  {
+    cardsCollection {
+      items {
+        title
+        subtitle
+        image {
+          title
+          description
+          contentType
+          fileName
+          size
+          url
+          width
+          height
+        }
+        subtitle
+        caption
+        logo {
+          title
+          description
+          contentType
+          fileName
+          size
+          url
+          width
+          height
+        }
+        content
+      }
+    }
+  }
+`;
+
+export default CardsQuery;
