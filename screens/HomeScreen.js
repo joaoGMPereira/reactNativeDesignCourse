@@ -19,6 +19,7 @@ import Menu from "../components/Menu";
 import { connect } from "react-redux";
 import Avatar from "../components/Avatar";
 import { Query } from "react-apollo";
+import { Platform } from "react-native";
 
 function mapStateToProps(state) {
   return { action: state.action, name: state.name };
@@ -45,6 +46,7 @@ class HomeScreen extends React.Component {
 
   componentDidMount() {
     StatusBar.setBarStyle("dark-content", true);
+    if (Platform.OS === "android") StatusBar.setBarStyle("light-content", true);
   }
 
   componentDidUpdate() {
@@ -66,6 +68,8 @@ class HomeScreen extends React.Component {
       ]).start();
 
       StatusBar.setBarStyle("light-content", true);
+      if (Platform.OS === "android")
+        StatusBar.setBarStyle("light-content", true);
     }
 
     if (this.props.action == "closeMenu") {
@@ -81,6 +85,8 @@ class HomeScreen extends React.Component {
       ]).start();
 
       StatusBar.setBarStyle("dark-content", true);
+      if (Platform.OS === "android")
+        StatusBar.setBarStyle("light-content", true);
     }
   };
 
@@ -110,18 +116,20 @@ class HomeScreen extends React.Component {
                 />
               </TitleBar>
               <ScrollView
-                horizontal={true}
                 style={{
-                  paddingTop: 30,
-                  paddingBottom: 20
+                  flexDirection: "row",
+                  padding: 20,
+                  paddingLeft: 12,
+                  paddingTop: 30
                 }}
+                horizontal={true}
                 showsHorizontalScrollIndicator={false}
               >
                 {LogosModel.map((logo, index) => (
                   <Logo key={index} image={logo.image} text={logo.text} />
                 ))}
               </ScrollView>
-              <Subtitle>Continue Learning</Subtitle>
+              <Subtitle>{"Continue Learning".toUpperCase()}</Subtitle>
               <ScrollView
                 horizontal={true}
                 style={{ paddingBottom: 30 }}
@@ -132,23 +140,24 @@ class HomeScreen extends React.Component {
                     if (loading) return <Message>Loading...</Message>;
                     if (error) return <Message>Error...</Message>;
 
+                    console.log(data.cardsCollection.items);
+
                     return (
                       <CardsContainer>
                         {data.cardsCollection.items.map((card, index) => (
                           <TouchableOpacity
                             key={index}
                             onPress={() => {
-                              console.log(card);
-                              this.props.navigation.navigate("Section", {
+                              this.props.navigation.push("Section", {
                                 section: card
                               });
                             }}
                           >
                             <Card
                               title={card.title}
-                              image={card.image}
+                              image={{ uri: card.image.url }}
                               caption={card.caption}
-                              logo={card.logo}
+                              logo={{ uri: card.logo.url }}
                               subtitle={card.subtitle}
                               content={card.content}
                             />
@@ -158,20 +167,44 @@ class HomeScreen extends React.Component {
                     );
                   }}
                 </Query>
+                {/* <CardsContainer>
+                  {CardsQuery.map((card, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        console.log(card);
+                        this.props.navigation.navigate("Section", {
+                          section: card
+                        });
+                      }}
+                    >
+                      <Card
+                        title={card.title}
+                        image={card.image}
+                        caption={card.caption}
+                        logo={card.logo}
+                        subtitle={card.subtitle}
+                        content={card.content}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </CardsContainer> */}
               </ScrollView>
-              <Subtitle>Popular Courses</Subtitle>
-              {CoursesModel.map((course, index) => (
-                <Course
-                  key={index}
-                  subtitle={course.subtitle}
-                  title={course.title}
-                  image={course.image}
-                  logo={course.logo}
-                  avatar={course.avatar}
-                  caption={course.caption}
-                  author={course.author}
-                />
-              ))}
+              <Subtitle>{"Popular Courses".toUpperCase()}</Subtitle>
+              <CoursesContainer>
+                {CoursesModel.map((course, index) => (
+                  <Course
+                    key={index}
+                    image={course.image}
+                    title={course.title}
+                    subtitle={course.subtitle}
+                    logo={course.logo}
+                    author={course.author}
+                    avatar={course.avatar}
+                    caption={course.caption}
+                  />
+                ))}
+              </CoursesContainer>
             </ScrollView>
           </SafeAreaView>
         </AnimatedContainer>
@@ -232,6 +265,13 @@ const Message = styled.Text`
   font-weight: 500;
 `;
 
+const CoursesContainer = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+`;
+
 const CardsContainer = styled.View`
   flex-direction: row;
+  padding-left: 10px;
 `;

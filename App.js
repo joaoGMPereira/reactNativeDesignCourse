@@ -22,9 +22,9 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "OPEN_MENU":
-      return { action: "openMenu" };
+      return { action: "openMenu", name: state.name, photo: state.photo };
     case "CLOSE_MENU":
-      return { action: "closeMenu" };
+      return { action: "closeMenu", name: state.name, photo: state.photo };
     case "UPDATE_NAME":
       return { name: action.name, photo: action.photo };
     default:
